@@ -30,7 +30,6 @@ async def on_ready():
 # 웃음 / 이모지 필터
 # -------------------
 def is_only_laugh_or_emoji(text):
-    # 특수문자, 이모지 제거
     text = re.sub(r'[^\w\sㄱ-ㅎ가-힣]', '', text)
     text = text.strip()
 
@@ -40,7 +39,6 @@ def is_only_laugh_or_emoji(text):
         if text.replace(p, "") == "":
             return True
 
-    # 글자 자체가 없으면 (이모지만 보낸 경우)
     if text == "":
         return True
 
@@ -83,7 +81,15 @@ async def on_message(message):
     if message.author.bot:
         return
 
-    # 웃음/이모지만 있으면 무시
+    # 스티커 무시
+    if message.stickers:
+        return
+
+    # 짤 / 파일 무시
+    if message.attachments:
+        return
+
+    # 웃음 / 이모지만 있으면 무시
     if is_only_laugh_or_emoji(message.content):
         return
 
